@@ -5,7 +5,7 @@ echo "[APK BUILD] Starting Android APK build..."
 
 # Clean old intermediates
 rm -rf android_build/gen/* android_build/bin/* android_build/assets/*
-mkdir -p android_build/gen android_build/bin/classes android_build/bin/apk_root android_build/assets app/build/outputs/apk/debug
+mkdir -p android_build/gen android_build/bin/classes android_build/bin/apk_root android_build/assets app/build/outputs/apk/debug releases
 
 # 1. Sync web dist into Android assets
 if [ -d "dist" ]; then
@@ -70,8 +70,11 @@ jarsigner -sigalg SHA1withRSA -digestalg SHA1 \
     -keypass android \
     android_build/bin/app-aligned.apk androiddebugkey
 
-# 9. Copy to official AI Studio APK destination
+# 9. Copy to official AI Studio APK destination AND top-level releases folder
 cp -f android_build/bin/app-aligned.apk app/build/outputs/apk/debug/app-debug.apk
+cp -f android_build/bin/app-aligned.apk releases/Simitone-debug.apk
 
-echo "[APK BUILD] APK successfully created at app/build/outputs/apk/debug/app-debug.apk"
-ls -lh app/build/outputs/apk/debug/app-debug.apk
+echo "[APK BUILD] APK successfully created:"
+echo " - app/build/outputs/apk/debug/app-debug.apk"
+echo " - releases/Simitone-debug.apk"
+ls -lh app/build/outputs/apk/debug/app-debug.apk releases/Simitone-debug.apk

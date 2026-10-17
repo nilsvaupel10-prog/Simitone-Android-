@@ -14,13 +14,21 @@
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
-[Rr]eleases/
 [Xx]64/
 [Xx]86/
-[Bb]uild/
 bld/
 [Bb]in/
 [Oo]bj/
+
+# Allow committed APKs
+!app/build/
+!app/build/outputs/
+!app/build/outputs/apk/
+!app/build/outputs/apk/debug/
+!app/build/outputs/apk/debug/app-debug.apk
+!releases/
+!releases/**
+
 
 # Visual Studio 2015 cache/options directory
 .vs/
