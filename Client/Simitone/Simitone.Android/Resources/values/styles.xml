@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- The theme of the game: fullscreen, no title bar, black background. -->
+  <style name="Simitone.GameTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+    <item name="android:windowBackground">@android:color/black</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+  </style>
+
+  <!-- The theme of the setup screen. -->
+  <style name="Simitone.LauncherTheme" parent="@android:style/Theme.Material.NoActionBar">
+    <item name="android:windowBackground">@color/simitone_background</item>
+    <item name="android:colorAccent">@color/simitone_accent</item>
+    <item name="android:textColorPrimary">@color/simitone_text</item>
+    <item name="android:statusBarColor">@color/simitone_background</item>
+    <item name="android:navigationBarColor">@color/simitone_background</item>
+  </style>
+
+</resources>

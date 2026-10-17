@@ -1,4 +1,4 @@
-﻿/*
+/*
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 If a copy of the MPL was not distributed with this file, You can obtain one at
 http://mozilla.org/MPL/2.0/.
@@ -23,6 +23,7 @@ using FSO.SimAntics;
 using MSDFData;
 using FSO.LotView.Model;
 using Simitone.Client.UI.Panels;
+using Simitone.Client.UI.Touch;
 
 namespace Simitone.Client
 {
@@ -183,6 +184,13 @@ namespace Simitone.Client
             base.Screen.Layers.Add(uiLayer);
             GameFacade.LastUpdateState = base.Screen.State;
 
+            // --- On-screen controls (added for the Android port) ----------------
+            // The touch module is self contained and only active when the engine
+            // runs in its touch mode (FSOEnvironment.SoftwareKeyboard). It adds
+            // an input layer at the front of the list and an overlay layer at
+            // the end, so the engine itself does not have to be changed.
+            TouchControlBridge.Initialize(this, base.Screen.Layers);
+
             if (!GlobalSettings.Default.Windowed && !GameFacade.GraphicsDeviceManager.IsFullScreen)
             {
                 GameFacade.GraphicsDeviceManager.ToggleFullScreen();
@@ -268,6 +276,9 @@ namespace Simitone.Client
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+
+            // --- On-screen controls (added for the Android port) ----------------
+            TouchControlBridge.Shutdown();
         }
 
 
