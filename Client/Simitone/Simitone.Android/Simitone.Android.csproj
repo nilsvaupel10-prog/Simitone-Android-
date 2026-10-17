@@ -1,0 +1,125 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Simitone for Android.
+
+    This is a thin platform host around the existing Simitone.Client / FreeSO
+    engine:
+
+      * MainActivity      - hosts the MonoGame client (Microsoft.Xna.Framework.AndroidGameActivity)
+      * LauncherActivity  - the setup screen (folder picker, resolution, options)
+      * Platform/         - the Android specific glue code (SAF, haptics, bitmap decoding)
+
+    The engine itself is untouched: everything that is specific to Android lives
+    in this project and in Simitone.Touch.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net9.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>26</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Simitone.Android</RootNamespace>
+    <AssemblyName>Simitone.Android</AssemblyName>
+    <LangVersion>$(SimitoneLangVersion)</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+
+    <ApplicationId>com.nilsvaupel10.simitone</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationTitle>Simitone</ApplicationTitle>
+
+    <!-- Build a universal APK by default; use -r android-arm64 for a slim one. -->
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <RuntimeIdentifiers>android-arm64;android-arm;android-x86;android-x64</RuntimeIdentifiers>
+    <PublishTrimmed>false</PublishTrimmed>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <!-- The engine uses reflection in a couple of places, keep the linker quiet. -->
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      The engine projects (FSO.*, Simitone.Client, Simitone.Touch) are plain
+      "net9.0" libraries that reference MonoGame.Framework.DesktopGL. Both
+      MonoGame NuGet packages ship an assembly called "MonoGame.Framework", so
+      the desktop flavour has to be excluded here - otherwise it would end up in
+      the APK next to (or instead of) the Android flavour.
+    -->
+    <PackageReference Include="MonoGame.Framework.Android" Version="$(MonoGameVersion)" />
+    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="$(MonoGameVersion)" ExcludeAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Simitone.Client\Simitone.Client.csproj" />
+    <ProjectReference Include="..\Simitone.Touch\Simitone.Touch.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The compiled FreeSO content. "Content/OGL" (OpenGL ES 3.0) and
+      "Content/iOS" (OpenGL ES 2.0 compatibility mode) are shipped inside the
+      APK because MonoGame's content manager reads .xnb files straight from the
+      APK assets on Android.
+      Build them first, see README.md ("Building the content").
+    -->
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\OGL\**\*.*">
+      <Link>Content\OGL\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\iOS\**\*.*">
+      <Link>Content\iOS\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\Fonts\**\*.*">
+      <Link>Content\Fonts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+
+    <!--
+      Everything that is read through System.IO (UI scripts, cities, meshes,
+      the CAS database, ...) is unpacked into the app's private storage on the
+      first start, so it is shipped as an asset as well. It lives under
+      "FreeSO/Content" so that it does not collide with the Simitone content.
+    -->
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\3D\**\*.*">
+      <Link>FreeSO\Content\3D\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\MeshReplace\**\*.*">
+      <Link>FreeSO\Content\MeshReplace\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\Textures\**\*.*">
+      <Link>FreeSO\Content\Textures\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\UI\**\*.*">
+      <Link>FreeSO\Content\UI\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\UIScript.egt">
+      <Link>FreeSO\Content\UIScript.egt</Link>
+    </AndroidAsset>
+    <AndroidAsset Include="..\..\..\FreeSO\TSOClient\tso.content\Content\bboxCache.txt">
+      <Link>FreeSO\Content\bboxCache.txt</Link>
+    </AndroidAsset>
+
+    <!-- The Simitone specific content (TS1 UI graphics, CAS database, patches). -->
+    <AndroidAsset Include="..\Simitone.Client\Content\**\*.*">
+      <Link>Simitone\Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </AndroidAsset>
+  </ItemGroup>
+
+  <!--
+    Safety net: both MonoGame packages ship an assembly called
+    "MonoGame.Framework.dll". The desktop one is excluded above, but if it ever
+    ends up in the output anyway the Android flavour is copied over it - the
+    desktop assembly has no Android implementation and would crash the game.
+  -->
+  <Target Name="EnsureAndroidMonoGameAssembly" AfterTargets="Build">
+    <ItemGroup>
+      <_AndroidMonoGameAssembly Include="$(NuGetPackageRoot)monogame.framework.android\$(MonoGameVersion)\lib\**\MonoGame.Framework.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_AndroidMonoGameAssembly)"
+          DestinationFolder="$(OutputPath)"
+          Condition=" '@(_AndroidMonoGameAssembly)' != '' "
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

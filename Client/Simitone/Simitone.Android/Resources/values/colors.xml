@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="simitone_background">#FF14171C</color>
+  <color name="simitone_surface">#FF1E222A</color>
+  <color name="simitone_accent">#FF3A82F6</color>
+  <color name="simitone_text">#FFFFFFFF</color>
+</resources>

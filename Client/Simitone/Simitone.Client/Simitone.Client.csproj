@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -670,6 +670,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Simitone.Touch\Simitone.Touch.csproj" />
     <ProjectReference Include="..\..\..\FreeSO\TSOClient\FSO.UI\FSO.UI.csproj" />
     <ProjectReference Include="..\..\..\FreeSO\TSOClient\tso.common\FSO.Common.csproj" />
     <ProjectReference Include="..\..\..\FreeSO\TSOClient\tso.files\FSO.Files.csproj" />
