@@ -1,0 +1,8 @@
+{
+  "name": "Simitone",
+  "description": "Android client and touch simulation interface for The Sims 1 (Simitone). Features setup launcher, touch control overlay & layout editor, live mode, motives, buy catalog, CAS, and lot simulation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

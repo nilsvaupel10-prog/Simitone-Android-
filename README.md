@@ -1,54 +1,54 @@
-![image](https://user-images.githubusercontent.com/6294155/29047328-2bb60b54-7bc3-11e7-8d88-cee5309495ed.png)
+# Simitone (Android Port)
 
-[Latest Pre-release](https://github.com/riperiperi/Simitone/releases/latest/) | [Download](https://github.com/riperiperi/Simitone/releases/latest/download/SimitoneWindows.zip)
+Simitone is an interactive client and simulation front-end for *The Sims 1*, inspired by FreeSO and the Simitone project. This rewrite brings the full Android touch client experience to the web and mobile devices, preserving the core engine structure, touch control system, launcher configuration, live lot simulation, and Create-A-Sim (CAS) studio.
 
-Alternative C# Windows Frontend for The Sims 1, based off of FreeSO. http://freeso.org 
-(***REQUIRES*** a legitimate copy of The Sims: Complete Collection)
+## Features
 
-![image](https://user-images.githubusercontent.com/6294155/68995217-112b2680-0883-11ea-9f92-1acc839a7ec0.png)
+### 1. Android Launcher & Setup Screen (`LauncherActivity`)
+- **Game Files Management**: Folder path selector (Storage Access Framework URI mapping), manual path input (`/storage/emulated/0/The Sims`), file validation for `GameData/Behavior.iff`, `Gameplay.iff`, `Objects.iff`, and `TS1Archive.iff`.
+- **All Files Access**: `MANAGE_EXTERNAL_STORAGE` permission grant simulation.
+- **Display Configurations**:
+  - Resolution presets: Native, 1280x720 (720p), 1600x900 (HD+), 1920x1080 (1080p), 2560x1440 (2K), and Custom Width/Height.
+  - Graphics Backend: OpenGL ES 3.0 (MRT / Content/OGL) vs OpenGL ES 2.0 (Compatibility / Content/iOS).
+  - 3D mode toggle (3D mesh rendering & lighting).
+  - Interface scale (UI Zoom: Automatic, 100%, 125%, 150%, 200%).
+  - Haptic feedback toggle.
 
-NOTE! Currently does not support the entire Fame career track, saving on vacation and a few other important things. While all objects run, many of them have bugs that can make certain lot types unplayable. For current development progress, see [this issue.](https://github.com/riperiperi/Simitone/issues/8)
+### 2. Touch Control System & Live Layout Editor (`Simitone.Touch`)
+- **Authentic Touch Controls**: Virtual analog camera pan stick, Zoom In, Zoom Out, Rotate Left, Rotate Right, Pause, Speed 1x, Speed 2x, Speed 3x, Frame Advance, Live/Buy/Build Mode switchers, and Menu.
+- **Interactive Layout Editor**:
+  - Drag and place any control directly on-screen.
+  - Snap-to-grid with configurable cell sizing.
+  - Per-widget scale, opacity, anchor position (TopLeft, TopRight, BottomLeft, BottomRight, Center), and visibility toggles.
+  - **Profiles Store**: Create, Save, Rename, Delete, and Export/Import JSON layout profiles (`Default`, `One-Handed Right`, `Tablet / Large Screen`, custom).
 
-*Only for Desktop Windows.* Other platforms cannot be officially supported.
+### 3. Live Lot Simulation & 2.5D Isometric World
+- **House Lot**: Parquet wood flooring, kitchen checkered tile, bathroom tile, walls with dynamic cutaway modes (Walls Down, Cutaway, Walls Up, Roof).
+- **Furniture & Objects**: Beds, Sofas, Refrigerator, Stove, Countertops, Dining Tables & Chairs, Television, Boombox Stereo, Telephone, Toilet, Shower, Vanity Sink, Bookshelves, Lamps, Plants.
+- **Live Sim Character**: Walking animations, autonomous motive decay, speech bubbles, and rotating 3D Plumbob that changes color according to mood (Green = happy, Yellow = moderate, Red = critical).
+- **Radial Pie Menu**: Authentic TS1 radial object menu for executing interactions (e.g., "Have Quick Snack", "Cook Dinner", "Watch TV", "Sleep", "Use Toilet", "Take Shower", "Study Cooking").
+- **Day/Night Cycle & SimTime**: Sim clock tracking day and hour with dynamic ambient lighting overlays.
 
-# Android port
+### 4. User Control Panel (UCP)
+- **Live Mode Tabs**:
+  - **Motives**: Real-time meters for Hunger, Comfort, Hygiene, Bladder, Energy, Fun, Social, Room.
+  - **Career**: Job title, salary, working hours, carpool arrival, promotion requirements.
+  - **Skills**: Skill stars for Cooking, Mechanical, Charisma, Logic, Body, Creativity.
+  - **Relationships**: Household and neighbor friend list with Daily and Lifetime scores.
+  - **Pocket**: Inventory items.
+- **Buy Mode**: Categorized catalog (Seating, Surfaces, Appliances, Electronics, Plumbing, Decorative, Lighting, Misc) with live § Simoleons purchasing and tile placement.
+- **Build Mode**: Wall, floor, door, window, and roof tools.
 
-This fork contains an **experimental Android port** of Simitone. It uses the
-modern .NET Android stack (`net9.0-android`) with MonoGame and keeps the
-engine, the SimAntics VM, the content system and the whole client logic
-untouched.
+### 5. Create-A-Sim (CAS) Studio
+- Head & outfit customization, gender, life stage (Adult / Child), and skin tone.
+- **25-Point Personality Allocation**: Neat, Outgoing, Active, Playful, Nice.
+- **Zodiac Calculation**: Automatic astrological sign assignment (Aries through Pisces) based on personality point distribution.
+- Save & Move In directly into the active household.
 
-* The app starts with a setup screen where the folder of your copy of
-  *The Sims: Complete Collection* is selected (Storage Access Framework), the
-  resolution, the graphics backend (OpenGL ES), the 3D mode and the interface
-  scale are configured and the path is validated.
-* A complete, editable system of on-screen controls (virtual stick, camera
-  buttons, speed controls, ...) with real icons, a layout editor and savable
-  profiles. The controls are translated into the key presses the engine
-  already understands, so no game logic had to be changed.
+### 6. Cheats Console
+- Classic cheat codes: `rosebud`, `klapaucius` (grants §1,000), `motherlode` (grants §50,000), `maxmotives` (restores all motives to 100%), `moveobjects on`.
 
-Build and design notes: [`Client/Simitone/Simitone.Android/README.md`](Client/Simitone/Simitone.Android/README.md)
-Touch module: [`Client/Simitone/Simitone.Touch/README.md`](Client/Simitone/Simitone.Touch/README.md)
-
-The port has **not been tested on a device yet** - it was written against the
-MonoGame 3.8.4 sources, but no Android SDK or device was available. You still
-need your own copy of *The Sims: Complete Collection*; no game assets are
-included.
-
-
-# Purpose
-
-On modern operating systems, The Sims has a few nagging issues that make it less than playable. Simitone can be seen as a tool to improve the playability of your existing installation of The Sims. Here are some features:
-
-- Playable in 3D - using a combination of models generated from the 2D sprites and created by the community.
-  - [Download the mesh pack here!](http://forum.freeso.org/forums/3d-remeshing.40/)
-- Custom user interface that works at modern resolutions. Working on a more desktop oriented interface.
-- Improved graphical performance, support for high resolutions and refresh rates.
-- Custom lighting - directional lights with smooth falloffs and shadows using generated 3D meshes.
-- *Volcanic*, a program which allows you to examine, modify and create new game objects. (from FreeSO)
-
-# Why is it called Simitone?
-
-Simitone -> Semitone -> musical term -> C# -> a note
-
-Further questions can be directed at my PR manager, uh, ... burglar cop.
+## Technical Stack
+- **Runtime**: Node.js 22, React 18, TypeScript, Tailwind CSS, Vite.
+- **Audio Engine**: Web Audio API synthesizer generating authentic Sim chimes, cash register sounds, speed clicks, and Sim speech.
+- **Deployment**: Served on host `0.0.0.0` port `3000`.
